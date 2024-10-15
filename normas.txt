@@ -2,10 +2,9 @@
 (a)elementos del centro de datos
 
 Tiene Zonas (Azul Nivel 1 Zona fria [switches,router, paneles de cableado]
-             Verde Nivel 2  Zona Templada [racks y servidores deuso habitual]
+             Verde Nivel 2  Zona Templada [racks y servidores de uso habitual]
              Rojo Nivel 3   Zona Caliente [racks,servidores, dispos. almacenamiento]
                             )
-cada vez que se quiere acceder a una de las zonas se pedirá identificacion de distinto tipo: tarjeta, biometría...etc
 
 
 (b) control de accesos
@@ -83,3 +82,18 @@ voltaje de alimentación se salgan de los valores óptimos
 zona actuando sobre los mecanismos de extinción y creando las correspondientes
 alertas y avisos por megafonía
 
+
+
+
+
+
+
+Quiero las reglas para lo siguiente:
+Para que el usuario cambie entre zonas necesita tener nivel de acceso igual o superior al nivel de la zona y que se actualicen la ocupación de cada zona(la dejada y la nueva) y la ubicación del usuario(la antigua por la nueva).
+
+Quiero las reglas para el control de climatización teniendo en cuenta lo siguiente:
+Los cambios de temperatura se efectuan con saltos de +-1ºC y los saltos de humedad +-10%. A mayores, la temperatura va de -20Cº a +80ºC y la humedad del 0 al 100%. El ventilador puede aumentar la potencia +-20 rpm con un margen de 0 a 100, cada 20 rpm la humedad se disipa en un 10%. La calefacción cuando está encendida va incrementando 1 grado a todas las zonas hasta que se apague. El aire acondicionado cuando está encendido va incrementando o disminuyendo dependiendo de la temperatura objetivo la temperatura en 1 unidad hasta que se apague.
+
+Para detectar el humo o las filtraciones de agua, si ocurre alguna de las dos, hacer un print de alerta por humo/filtraciones de agua, evacuar edificio. En caso de incendio, dependiendo del tipo de zona donde ocurra (normal/sensible), se actúa con agua (normal) o gas (sensible), además, para poder usar el gas la ocupación de la zona ha de ser 0 por lo que hay que hacer un aviso de evacuación de la sala para que los usuarios se vayan.
+
+Cada zona tiene luz siempre y cuando la ocupación > 0, cada rack debe tener un valor de voltaje entre 210 y 230, en caso de que salga de esos valores se mandará un aviso (el voltaje oscila entre 100 y 300V). El rack también debe estar a una temperatura ideal.
