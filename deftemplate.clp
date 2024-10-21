@@ -42,6 +42,9 @@
     (slot id)
     (slot temperatura)
     (slot voltaje)) ; (De 100V a 300 V) (Voltaje Ideal de 210 a 230V)
-
+(deftemplate sensor
+    (slot id)
+    (slot tipo)
+    (slot medicion))
 
 ; Reglas 
