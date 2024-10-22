@@ -56,7 +56,6 @@
     =>
     (retract ?usuario)
     (modify ?zona (ocupacion (+ (fact-slot-value ?zona ocupacion) 1)))
-    (assert (usuario (nombre ?nombre) (nivel-acceso ?nivel-usuario) (ubicacion ?nueva-zona)))
 )
 
 (defrule salida-zona
@@ -68,6 +67,7 @@
 )
 
 ; Control de climatizacion
+
 (defrule control-temperatura
     ?zona <- (zona (nombre ?nombre) (temperatura ?temp))
     ?modulo <- (modulo-aire (sala ?nombre) (temperatura-objetivo 22) (estado "apagado"))
@@ -81,10 +81,16 @@
     (test (!= ?temp 22))
     =>
     (if (< ?temp 22)
-        then (modify ?zona (temperatura (+ ?temp 1)))
-        else (modify ?zona (temperatura (- ?temp 1))))
+        then (progn
+            (modify ?zona (temperatura (+ ?temp 1)))
+            (printout t "Ajustando temperatura en " ?sala " de " ?temp " a " (+ ?temp 1) crlf))
+        else (progn
+            (modify ?zona (temperatura (- ?temp 1)))
+            (printout t "Ajustando temperatura en " ?sala " de " ?temp " a " (- ?temp 1) crlf)))
     (if (= ?temp 22)
-        then (modify ?modulo (estado "apagado"))))
+        then (progn
+            (modify ?modulo (estado "apagado"))
+            (printout t "La temperatura en " ?sala " ha alcanzado el objetivo de 22. Apagando el módulo de aire." crlf))))
 
 ; Detección de desastres
 

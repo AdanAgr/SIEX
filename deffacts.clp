@@ -1,6 +1,5 @@
 ; Facts iniciales de zonas
 (deffacts zonas-iniciales
-    (zona (nombre "Pasillo") (nivel 1) (temperatura 21) (ocupacion 1) (tipo "normal") (estado-desastre "normal"))
     (zona (nombre "Cafeteria") (nivel 1) (temperatura 21) (ocupacion 1) (tipo "normal") (estado-desastre "normal"))
     (zona (nombre "Despacho") (nivel 2) (temperatura 21) (ocupacion 1) (tipo "normal") (estado-desastre "normal"))
     (zona (nombre "Teleco") (nivel 2) (temperatura 23) (ocupacion 1) (tipo "sensible") (estado-desastre "normal"))
