@@ -48,7 +48,7 @@
 ; Rules
 
 
-; Reglas de control de acceso basado en el nivel
+; Reglas de control de accesos
 (defrule acceso-zona
     ?usuario <- (usuario (nombre ?nombre) (nivel-acceso ?nivel-usuario) (ubicacion ?ubicacion))
     ?zona <- (zona (nombre ?nueva-zona) (nivel ?nivel-zona))
@@ -65,7 +65,7 @@
     (modify ?zona (ocupacion (- (ocupacion ?zona) 1)))
     (modify ?usuario (ubicacion "Pasillo")))
 
-; Control de temperatura
+; Control de climatizacion
 (defrule control-temperatura
     ?zona <- (zona (nombre ?nombre) (temperatura ?temp))
     ?modulo <- (modulo-aire (sala ?nombre) (temperatura-objetivo 22) (estado "apagado"))
@@ -84,7 +84,7 @@
     (if (= ?temp 22)
         then (modify ?modulo (estado "apagado"))))
 
-; Alerta de desastre (humo o agua) y evacuación
+; Detección de desastres
 (defrule deteccion-desastre
     ?sensor <- (sensor-desastres (tipo ?tipo) (zona ?zona) (aviso "activo"))
     ?zona <- (zona (nombre ?zona) (estado-desastre "normal"))
@@ -95,7 +95,7 @@
         (retract ?usuario)
         (assert (usuario (ubicacion "Pasillo")))))
 
-; Control de iluminacion
+; Control de Alimentacion
 (defrule control-luz-encender
     ?zona <- (zona (nombre ?nombre) (ocupacion ?ocup))
     ?luz <- (luz (sala ?nombre) (estado "apagado"))
@@ -110,7 +110,6 @@
     =>
     (modify ?luz (estado "apagado")))
 
-; Alerta y ajuste de voltaje del rack
 (defrule alerta-voltaje-rack
     ?rack <- (rack (id ?id) (voltaje ?volt))
     (or (test (< ?volt 210)) (test (> ?volt 230)))
