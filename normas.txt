@@ -54,7 +54,7 @@ Cada Rack dispone de un monitor de la corriente de alimentación
 que indica el voltaje de entrada en cada instante, con valores
 que oscilan entre 100 y 300 Voltios (V)
 
-Cada Rack tiene un rango de alimentación ideal (210-300 V) 
+Cada Rack tiene un rango de alimentación ideal (210-230 V) 
 los valores que salgan de ese rango tendrán que generar una alerta
 
 Cosas que debe hacer el sistema
