@@ -55,15 +55,17 @@
     (test (>= ?nivel-usuario ?nivel-zona))
     =>
     (retract ?usuario)
-    (modify ?zona (ocupacion (+ (ocupacion ?zona) 1)))
-    (assert (usuario (nombre ?nombre) (nivel-acceso ?nivel-usuario) (ubicacion ?nueva-zona))))
+    (modify ?zona (ocupacion (+ (fact-slot-value ?zona ocupacion) 1)))
+    (assert (usuario (nombre ?nombre) (nivel-acceso ?nivel-usuario) (ubicacion ?nueva-zona)))
+)
 
 (defrule salida-zona
     ?usuario <- (usuario (nombre ?nombre) (ubicacion ?ubicacion))
     ?zona <- (zona (nombre ?ubicacion))
     =>
-    (modify ?zona (ocupacion (- (ocupacion ?zona) 1)))
-    (modify ?usuario (ubicacion "Pasillo")))
+    (modify ?zona (ocupacion (- (fact-slot-value ?zona ocupacion) 1)))
+    (modify ?usuario (ubicacion "Pasillo"))
+)
 
 ; Control de climatizacion
 (defrule control-temperatura
@@ -76,7 +78,7 @@
 (defrule ajustar-temperatura
     ?modulo <- (modulo-aire (sala ?sala) (temperatura-objetivo 22) (estado "encendido"))
     ?zona <- (zona (nombre ?sala) (temperatura ?temp))
-    (test (<> ?temp 22))
+    (test (!= ?temp 22))
     =>
     (if (< ?temp 22)
         then (modify ?zona (temperatura (+ ?temp 1)))
@@ -85,17 +87,33 @@
         then (modify ?modulo (estado "apagado"))))
 
 ; Detección de desastres
+
 (defrule deteccion-desastre
-    ?sensor <- (sensor-desastres (tipo ?tipo) (zona ?zona) (aviso "activo"))
-    ?zona <- (zona (nombre ?zona) (estado-desastre "normal"))
+    ?sensor <- (sensor-desastres (tipo ?tipo) (zona ?zona-sensor) (aviso "activo"))
+    ?zona <- (zona (nombre ?zona-sensor) (estado-desastre "normal"))
     =>
-    (printout t "¡Alerta de desastre por " ?tipo " en la zona " ?zona "! Todo el mundo debe evacuar al pasillo." crlf)
+    (printout t "¡Alerta de desastre por " ?tipo " en la zona " ?zona-sensor "! Todo el mundo debe evacuar al pasillo." crlf)
     (modify ?zona (estado-desastre "en-desastre"))
-    (forall (usuario (ubicacion ?zona))
+
+    ;; Obtener todos los usuarios en la zona
+    (bind ?usuarios (find-all-facts ((?u usuario)) (eq ?u:ubicacion ?zona-sensor)))
+
+    ;; Iterar sobre los usuarios y modificar su ubicación
+    (foreach ?usuario ?usuarios
         (retract ?usuario)
-        (assert (usuario (ubicacion "Pasillo")))))
+        (assert (usuario (nombre (fact-slot-value ?usuario nombre)) 
+                         (nivel-acceso (fact-slot-value ?usuario nivel-acceso)) 
+                         (ubicacion "Pasillo")))
+    )
+)
+
+
+
+
+
 
 ; Control de Alimentacion
+
 (defrule control-luz-encender
     ?zona <- (zona (nombre ?nombre) (ocupacion ?ocup))
     ?luz <- (luz (sala ?nombre) (estado "apagado"))
