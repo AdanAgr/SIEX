@@ -73,7 +73,8 @@
     ?modulo <- (modulo-aire (sala ?nombre) (temperatura-objetivo 22) (estado "apagado"))
     (or (test (< ?temp 20)) (test (> ?temp 25)))
     =>
-    (modify ?modulo (estado "encendido")))
+    (modify ?modulo (estado "encendido"))
+    (printout t crlf "Temperatura en " ?nombre " no ideal, aire encendido" crlf))
 
 (defrule ajustar-temperatura
     ?modulo <- (modulo-aire (sala ?sala) (temperatura-objetivo 22) (estado "encendido"))
@@ -86,11 +87,15 @@
             (printout t "Ajustando temperatura en " ?sala " de " ?temp " a " (+ ?temp 1) crlf))
         else (progn
             (modify ?zona (temperatura (- ?temp 1)))
-            (printout t "Ajustando temperatura en " ?sala " de " ?temp " a " (- ?temp 1) crlf)))
-    (if (= ?temp 22)
-        then (progn
-            (modify ?modulo (estado "apagado"))
-            (printout t "La temperatura en " ?sala " ha alcanzado el objetivo de 22. Apagando el módulo de aire." crlf))))
+            (printout t "Ajustando temperatura en " ?sala " de " ?temp " a " (- ?temp 1) crlf))))
+
+(defrule temperatura-ajustada
+    ?modulo <- (modulo-aire (sala ?sala) (temperatura-objetivo 22) (estado "encendido"))
+    ?zona <- (zona (nombre ?sala) (temperatura ?temp))
+    (test (= ?temp 22))
+    =>
+    (modify ?modulo (estado "apagado"))
+    (printout t "Temperatura en " ?sala " ideal, aire apagado " crlf))
 
 ; Detección de desastres
 
