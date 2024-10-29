@@ -1,1 +1,0 @@
-;Simular un incendio
