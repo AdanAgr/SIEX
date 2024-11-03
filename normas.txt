@@ -1,0 +1,99 @@
+
+(a)elementos del centro de datos
+
+Tiene Zonas (Azul Nivel 1 Zona fria [switches,router, paneles de cableado]
+             Verde Nivel 2  Zona Templada [racks y servidores de uso habitual]
+             Rojo Nivel 3   Zona Caliente [racks,servidores, dispos. almacenamiento]
+                            )
+
+
+(b) control de accesos
+
+las zonas monitorizan cuanta gente hay dentro de cada sala
+
+cada usuario tiene un nivel de acceso (de 1 a 3) y este le permite entrar a zonas de su mismo nivel o inferiores
+
+(c) control de climatizacion
+
+cada zona del centro de datos tiene una serie de sensores de climatizacion
+
+temperatura media de la zona (-20º a +80º) y sus saltos son de +-1º
+humedad (0% a 100%) y sus saltos son del +-10%
+
+todas las zonas tienen el mismo rango ideal de temperatura y de humedad
+
+existe un sistema de calefacción global que se puede encender y apagar para todas las zonas a la vez
+
+cada zona tiene un aire acondicionado propio, el aire acondicionado puede encenderse, apagarse o aumentar/reducir su intensidad en saltos de +-1º
+
+cada zona cuenta con un ventilador, el cual afecta a la temperatura y a la humedad de la zona
+el ventidor puede encenderse, apagarse o aumentar/reducir la potencia con velocidades de +-20 rpms (con un máximo de 100 rpms)
+
+
+
+(d) deteccion de "desastres"
+
+cada zona tiene un detector de humo y un detector de filtraciones de agua
+
+cada zona tiene un tipo de contenido (normal o sensible)
+
+cada zona cuenta con doble sistema de extincion de incendios (con agua o gas)
+la de agua se aplica SOLO si el contenido de la zona es normal / NO sensible
+la de gas se aplica SOLO si no hay personal dentro de la zona
+
+existe un sistema de megafonía para todo el centro que permiete mandar mensajes
+por aviso (Por ejemplo: evacuar edificio alerta de inundaciones)
+
+(e) control de alimentacion 
+
+Cada zona tiene un sistema de iluminación automático
+que se encenderá cuando haya gente dentro y se apaga
+cuando la ultima persona que esté dentro se marche
+
+Cada Rack dispone de un monitor de la corriente de alimentación
+que indica el voltaje de entrada en cada instante, con valores
+que oscilan entre 100 y 300 Voltios (V)
+
+Cada Rack tiene un rango de alimentación ideal (210-230 V) 
+los valores que salgan de ese rango tendrán que generar una alerta
+
+Cosas que debe hacer el sistema
+
+
+
+----------------------------------------------------------
+
+
+Funcionamiento deseados
+
+
+-Mantener las restricciones de control de accesos de las zonas y usuarios
+
+-Mantener los niveles de temperatura y humedad de las zonas en los valores deseados, actuando sobre 
+la calefacción, el mecanismo del aire acondicionado y los ventiladores
+
+-Monitorizar los niveles de temperatura de cada Rack 
+creando alertas en caso de que estos se salgan de los valores óptimos
+
+-Monitorizar la alimentación eléctrica de cada Rack creando alertasen el caso de que el 
+voltaje de alimentación se salgan de los valores óptimos
+
+-Imlementar la detección y actuación ante desastres (fuego e inundaciones) en cada
+zona actuando sobre los mecanismos de extinción y creando las correspondientes
+alertas y avisos por megafonía
+
+
+
+
+
+
+
+Quiero las reglas para lo siguiente:
+Para que el usuario cambie entre zonas necesita tener nivel de acceso igual o superior al nivel de la zona y que se actualicen la ocupación de cada zona(la dejada y la nueva) y la ubicación del usuario(la antigua por la nueva).
+
+Quiero las reglas para el control de climatización teniendo en cuenta lo siguiente:
+Los cambios de temperatura se efectuan con saltos de +-1ºC y los saltos de humedad +-10%. A mayores, la temperatura va de -20Cº a +80ºC y la humedad del 0 al 100%. El ventilador puede aumentar la potencia +-20 rpm con un margen de 0 a 100, cada 20 rpm la humedad se disipa en un 10%. La calefacción cuando está encendida va incrementando 1 grado a todas las zonas hasta que se apague. El aire acondicionado cuando está encendido va incrementando o disminuyendo dependiendo de la temperatura objetivo la temperatura en 1 unidad hasta que se apague.
+
+Para detectar el humo o las filtraciones de agua, si ocurre alguna de las dos, hacer un print de alerta por humo/filtraciones de agua, evacuar edificio. En caso de incendio, dependiendo del tipo de zona donde ocurra (normal/sensible), se actúa con agua (normal) o gas (sensible), además, para poder usar el gas la ocupación de la zona ha de ser 0 por lo que hay que hacer un aviso de evacuación de la sala para que los usuarios se vayan.
+
+Cada zona tiene luz siempre y cuando la ocupación > 0, cada rack debe tener un valor de voltaje entre 210 y 230, en caso de que salga de esos valores se mandará un aviso (el voltaje oscila entre 100 y 300V). El rack también debe estar a una temperatura ideal.
